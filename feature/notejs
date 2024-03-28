@@ -1,0 +1,41 @@
+const axios = require('axios');
+const Replicate = require("replicate");
+const { REPLICATE_API_TOKEN } = require('../config');
+
+const replicate = new Replicate({
+    auth: REPLICATE_API_TOKEN
+});
+
+async function convertImageToURI(imageData) {
+  try {
+    // // Convert the MessageMedia object to base64 encoded string
+    const base64ImageData = Buffer.from(imageData.data, 'base64').toString('base64');
+
+    // Replace the existing code below with the following:
+    const output = await replicate.run(
+      "yan-ops/face_swap:034b2af6027558c94fdd7a028400cb68d7f049ad3351ab7b7cfc09fdaeb96d46",
+      {
+        input: {
+          det_thresh: 0.5,
+          request_id: "aa6a2aad-90ec-4c00-b90b-89f4d62e6b84",
+          source_image: `data:image/jpeg;base64,${base64ImageData}`, // Convertir l'image en format 'uri' avec le format JPEG
+          target_image: "https://replicate.delivery/pbxt/JkUYWp60oNwz1SF9AJvJPv7upLqucTyaeCxQ07qZGijlDKxt/face_swap_09.jpg" // URL de l'image cible
+        }
+      }
+    );
+
+    console.log('Réponse de l\'API de swap:', output); // Ajout du log pour capturer la réponse de l'API
+
+
+    
+    
+    // Gérer la suite du code si nécessaire...
+  } catch (error) {
+    console.error('Error running the Face Swap model:', error);
+    throw error;
+  }
+}
+
+module.exports = {
+  convertImageToURI
+}

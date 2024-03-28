@@ -1,0 +1,10 @@
+{
+    "name": "Cleverdown",
+    "filename": {
+        "mp3": "FullHD",
+        "mp4": "videoHD"
+    },
+    "prefix": "!",
+    "timezone": "Asia/Jakarta",
+    "groups": false
+}

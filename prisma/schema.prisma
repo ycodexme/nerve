@@ -1,0 +1,51 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider     = "mysql"
+  url          = env("DATABASE_URL")
+  relationMode = "prisma"
+}
+
+model User {
+  id                Int           @id @default(autoincrement())
+  phoneNumber       String        @unique
+  subscription      Subscription? @relation(fields: [subscriptionId], references: [id])
+  remainingRequests Int
+  subscriptionType  String
+  subscriptionId    Int?
+  Payment           Payment[]
+}
+
+model Subscription {
+  id                      Int       @id @default(autoincrement())
+  phone_number            String    @unique
+  subscription_type       String
+  remaining_questions     Int
+  unlimited_access_expiry DateTime?
+  payments                Payment[]
+  User                    User[]
+  updatedAt               DateTime   @updatedAt
+  expiryDate              DateTime?
+}
+
+model Payment {
+  trackId        String      @id @unique
+  amount         Float
+  currency       String
+  description    String?
+  status         String
+  timestamp      DateTime
+  phoneNumber    String?
+  user           User?       @relation(fields: [userId], references: [id])
+  userId         Int?
+  subscription   Subscription? @relation(fields: [subscriptionId], references: [id])
+  subscriptionId Int?
+}
+
+model Document {
+  id      String  @id @default(cuid())
+  content String
+  vector  Json?   // Remplacez Json par le type correct pour les vecteurs dans votre configuration
+}
